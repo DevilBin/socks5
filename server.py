@@ -66,14 +66,13 @@ class Socks5Server(socketserver.StreamRequestHandler):
             reply += socket.inet_aton(local[0]) + struct.pack(">H", local[1])
         except socket.error:
             reply = '\x05\x05\x00\x01\x00\x00\x00\x00\x00\x00'
-            return False
         sock.send(reply)
         if reply[1] == 0:  # Success
             self.forward(sock, remote)
         return True
 
     @staticmethod
-    def forward( sock, remote):
+    def forward(sock, remote):
         fd_set = [sock, remote]
         while True:
             r, w, e = select.select(fd_set, [], [])
